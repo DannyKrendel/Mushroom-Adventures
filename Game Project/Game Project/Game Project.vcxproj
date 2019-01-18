@@ -22,8 +22,9 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{4927E861-DCF2-45DB-A489-A1FF97B26365}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SimpleGame</RootNamespace>
+    <RootNamespace>GameProject</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <ProjectName>Game Project</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -91,12 +92,12 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Danny\Source\Repos\Simple Game\Simple Game\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Danny\Source\Repos\Game Project\Game Project\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Danny\Source\Repos\Simple Game\Simple Game\SFML\lib-x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Danny\Source\Repos\Game Project\Game Project\SFML\lib-x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>winmm.lib;freetype.lib;opengl32.lib;sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -126,14 +127,14 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Danny\Source\Repos\Simple Game\Simple Game\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Danny\Source\Repos\Game Project\Game Project\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Danny\Source\Repos\Simple Game\Simple Game\SFML\lib-x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Danny\Source\Repos\Game Project\Game Project\SFML\lib-x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>winmm.lib;freetype.lib;opengl32.lib;sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -159,7 +160,6 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Collider.h" />
-    <ClInclude Include="Quest.h" />
     <ClInclude Include="Stats.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="pch.h" />
@@ -170,7 +170,6 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="Quest.cpp" />
     <ClCompile Include="Stats.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="pch.cpp">
@@ -180,7 +179,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Simple Game.cpp" />
+    <ClCompile Include="Game Project.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="View.cpp" />
   </ItemGroup>

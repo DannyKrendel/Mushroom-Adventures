@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simple Game", "Simple Game\Simple Game.vcxproj", "{4927E861-DCF2-45DB-A489-A1FF97B26365}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game Project", "Game Project\Game Project.vcxproj", "{4927E861-DCF2-45DB-A489-A1FF97B26365}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {2B2CF655-55F1-40E7-81CB-B9D83DF2C139}
+		SolutionGuid = {FED4F475-8372-4848-BFA3-39B76917F75A}
 	EndGlobalSection
 EndGlobal

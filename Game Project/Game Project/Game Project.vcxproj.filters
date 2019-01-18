@@ -36,18 +36,12 @@
     <ClInclude Include="Collider.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Quest.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="Stats.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Simple Game.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -68,10 +62,10 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Quest.cpp">
+    <ClCompile Include="Stats.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Stats.cpp">
+    <ClCompile Include="Game Project.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
