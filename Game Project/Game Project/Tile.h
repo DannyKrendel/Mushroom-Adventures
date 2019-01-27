@@ -1,35 +1,23 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Collider.h"
+#include "Entity.h"
 
 using namespace sf;
 
 enum TileType
 {
-	Ground, Border, Water, Spores, Spikes, Health, None
+	Ground, Border, Water, None
 };
 
-struct Tile : public Drawable
+struct Tile : public Entity
 {
 private:
-	Sprite sprite;
-	TileType tileType;
-	Collider collider;
-
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+	TileType type;
 public:
 	Tile();
-	Tile(TileType type, Texture *texture, Vector2u size, Collider col);
+	Tile(const TileType &type, const Texture &texture, const Vector2u &size, const Collider &col);
 
-	void setPosition(const Vector2f &pos);
-	void setScale(const Vector2f &scale);
-	void setOrigin(const Vector2f &origin);
+	TileType getType() const;
 
-	const Vector2f & getPosition() const;
-	const Collider & getCollider() const;
-	TileType getTileType() const;
-
-	bool operator==(const Tile &rhs);
-	bool operator!=(const Tile &rhs);
+	bool operator==(const Entity &rhs) const;
 };
-

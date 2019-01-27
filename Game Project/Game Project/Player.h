@@ -1,9 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "TileMap.h"
 #include "Animation.h"
 #include "Collider.h"
 #include "Stats.h"
+#include "EntityManager.h"
+#include "Item.h"
+#include "Obstacle.h"
+#include "Leaves.h"
 
 using namespace sf;
 
@@ -16,7 +21,7 @@ private:
 	Vector2f currentVelocity;
 	Vector2f maxVelocity;
 	Stats stats;
-	Animation * currentAnim;
+	Animation *currentAnim;
 	Vector2u step;
 	Vector2f nextPosition;
 	float invincibilityTime = 2;
@@ -28,6 +33,8 @@ private:
 	void handeInput();
 	bool checkWalls(const TileMap &tileMap, float deltaTime);
 	void updateAnimation(float deltaTime);
+	void calcNextPosition();
+	bool isOnNextPosition();
 public:
 	Animation idleAnim;
 	Animation jumpAnim;
@@ -35,22 +42,31 @@ public:
 	Animation hurtAnim;
 	Animation deathAnim;
 
+	Sound jumpSound;
+	Sound hitSound;
+	Sound deathSound;
+	Sound pickupSound;
+	Sound lifeSound;
+
 	bool isAlive;
 	bool faceRight;
 
-	const Stats & getStats() const;
-	const Collider & getCollider() const;
-	const Vector2f & getPosition() const;
+	const Stats &getStats() const;
+	const Collider &getCollider() const;
+	const Vector2f &getPosition() const;
 
 	void setPosition(const Vector2f &pos);
 	void setScale(const Vector2f &scale);
 	void setOrigin(const Vector2f &origin);
 
-	void calcNextPosition();
-
-	Player(const Vector2f &size, const Vector2u &step, Texture texture, Collider col, Stats stats, const Vector2f &maxVelocity);
+	Player();
+	Player(const Vector2f &size, const Vector2u &step, const Texture &texture, const Collider &col, const Stats &stats, const Vector2f &maxVelocity);
 
 	void update(TileMap &tileMap, float deltaTime);
 	void interactionWithMap(TileMap &tileMap, float deltaTime);
-};
+	void interactionWithItems(EntityManager<Item> &itemManager, float deltaTime);
+	void interactionWithObstacles(EntityManager<Obstacle> &obstacleManager, float deltaTime);
+	void interactionWithLeaves(EntityManager<Leaves> &leavesManager, float deltaTime);
 
+	void reset(const Stats &stats);
+};

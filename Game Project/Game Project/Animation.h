@@ -25,7 +25,6 @@ public:
 	void setDuration(float duration);
 
 	bool isFinished();
-	Animation & reset();
+	Animation &reset();
 	void update(float deltaTime, bool faceRight);
 };
-

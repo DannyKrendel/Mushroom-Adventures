@@ -10,17 +10,17 @@ Stats::Stats()
 {
 }
 
-Stats::Stats(const View *view, Text text, float health, float score)
+Stats::Stats(const View &view, const Text &text, float health, float score)
 {
-	this->view = view;
+	this->view = &view;
 	this->text = text;
-	this->health = health;
-	this->score = score;
+	this->lives = health;
+	this->berriesToFind = score;
 }
 
 void Stats::update()
 {
 	text.setPosition(view->getCenter().x - view->getSize().x / 2 + view->getSize().x / 100, view->getCenter().y - view->getSize().y / 2 + view->getSize().y / 100);
 	text.setString(String(String
-	("«доровье: " + std::to_string(int(health)) + "\n" + "—чет: " + std::to_string(int(score)) + "\n"), std::locale("rus")));
+	("∆изней: x" + std::to_string(int(lives)) + "\n" + "ягод осталось собрать: " + std::to_string(int(berriesToFind)) + "\n"), std::locale("rus")));
 }

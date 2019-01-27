@@ -3,7 +3,7 @@
 
 View view;
 
-void clampView(Vector2f playerPos, TileMap tileMap)
+void clampView(const Vector2f &playerPos, const TileMap &tileMap)
 {
 	Vector2f tempPos(playerPos);
 

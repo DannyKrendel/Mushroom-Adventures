@@ -11,11 +11,10 @@ private:
 
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 public:
-	float health, score;
+	float lives, berriesToFind;
 
 	Stats();
-	Stats(const View *view, Text text, float health = 100, float score = 0);
+	Stats(const View &view, const Text &text, float lives, float berries);
 
 	void update();
 };
-

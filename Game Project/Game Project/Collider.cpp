@@ -11,7 +11,7 @@ Collider::Collider(float left, float top, float width, float height)
 	setSize(Vector2f(width, height));
 }
 
-const FloatRect & Collider::getRect() const
+const FloatRect &Collider::getRect() const
 {
 	return FloatRect(getPosition(), getSize());
 }

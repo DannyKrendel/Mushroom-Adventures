@@ -1,10 +1,16 @@
 #include "pch.h"
 #include "Player.h"
+#include "Item.h"
+#include "Obstacle.h"
+#include "Leaves.h"
+#include <SFML/Audio.hpp>
 
-Player::Player(const Vector2f &size, const Vector2u &step, Texture texture, Collider col, Stats stats, const Vector2f &maxVelocity)
+Player::Player()
 {
-	isAlive = true;
-	faceRight = true;
+}
+
+Player::Player(const Vector2f &size, const Vector2u &step, const Texture &texture, const Collider &col, const Stats &stats, const Vector2f &maxVelocity)
+{
 	this->texture = texture;
 	this->step = step;
 	this->collider = col;
@@ -14,6 +20,8 @@ Player::Player(const Vector2f &size, const Vector2u &step, Texture texture, Coll
 	body.setSize(size);
 	body.setTexture(&this->texture);
 	setOrigin(Vector2f(body.getSize().x / 2.0f, body.getSize().y));
+
+	reset(stats);
 }
 
 void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
@@ -62,7 +70,7 @@ bool Player::checkWalls(const TileMap &tileMap, float deltaTime)
 {
 	for (auto &t : tileMap)
 	{
-		if (t.getTileType() == TileType::Border && t.getCollider().isCollidingWith(nextPosition))
+		if (t.getType() == TileType::Border && t.getCollider().isCollidingWith(nextPosition))
 			return true;
 	}
 	return false;
@@ -137,24 +145,40 @@ void Player::calcNextPosition()
 	nextPosition.y = getPosition().y + ((currentVelocity.y > 0) - (currentVelocity.y < 0)) * int(step.y);
 }
 
+bool Player::isOnNextPosition()
+{
+	/*if (Vector2i(getPosition()) == Vector2i(nextPosition))
+		return true;*/
+
+	Vector2f diff(getPosition().x - nextPosition.x, getPosition().y - nextPosition.y);
+
+	return (diff.x > 0) - (diff.x < 0) == (currentVelocity.x > 0) - (currentVelocity.x < 0) && (diff.y > 0) - (diff.y < 0) == (currentVelocity.y > 0) - (currentVelocity.y < 0);
+}
+
 void Player::update(TileMap &tileMap, float deltaTime)
 {
 	// если у персонажа нет здоровья - он умер
-	if (stats.health <= 0)
-		isAlive = false;
-
-	// если персонаж не двигается и не в прыжке
-	if (currentVelocity == Vector2f(0, 0) && currentAnim != &jumpAnim)
+	if (stats.lives <= 0 && isAlive == true)
 	{
-		// включается стандартная анимация
-		currentAnim = &idleAnim;
+		isAlive = false;
+		deathSound.play();
+	}
 
-		// проверка нажатых клавиш
-		handeInput();
+	// если персонаж не двигается
+	if (currentVelocity == Vector2f(0, 0))
+	{
+		// если текущая анимация не прыжок
+		if (currentAnim != &jumpAnim)
+		{
+			// проверка нажатых клавиш
+			handeInput();
+		}
 
 		// если скорость персонажа изменилась
 		if (currentVelocity != Vector2f(0, 0))
 		{
+			// звук прыжка
+			jumpSound.play();
 			// вычисляется следующая позиция
 			calcNextPosition();
 
@@ -189,8 +213,8 @@ void Player::update(TileMap &tileMap, float deltaTime)
 	// обновление анимации
 	updateAnimation(deltaTime);
 
-	// если анимация прыжка закончилась, переключение на стандартную анимацию
-	if (currentAnim == &jumpAnim && currentAnim->isFinished())
+	// если другая анимация закончилась, переключение на стандартную анимацию
+	if (currentAnim != &idleAnim && currentAnim->isFinished())
 	{
 		currentAnim = &idleAnim.reset();
 	}
@@ -199,7 +223,7 @@ void Player::update(TileMap &tileMap, float deltaTime)
 	move(currentVelocity * deltaTime);
 
 	// если игрок уже на следующем тайле, прекратить движение
-	if (Vector2i(getPosition()) == Vector2i(nextPosition))
+	if (isOnNextPosition())
 	{
 		setPosition(nextPosition);
 		collider.setPosition(nextPosition);
@@ -218,19 +242,7 @@ void Player::interactionWithMap(TileMap &tileMap, float deltaTime)
 	{
 		if (collider.isCollidingWith(tile.getCollider()))
 		{
-			TileType tileType = tile.getTileType();
-
-			switch (tileType)
-			{
-			case Spores:
-				stats.score += 1;
-				break;
-			case Health:
-				stats.health += 1;
-				break;
-			case None:
-				return;
-			}
+			TileType tileType = tile.getType();
 
 			if (tileType == Water && isSlowedDown == false)
 			{
@@ -242,18 +254,84 @@ void Player::interactionWithMap(TileMap &tileMap, float deltaTime)
 				isSlowedDown = false;
 				maxVelocity /= 0.5f;
 			}
-
-			if (hurtTime <= 0 && tileType == Spikes)
-			{
-				stats.health -= 20;
-				hurtTime = invincibilityTime;
-			}
-
-			if (tileType == Spores || tileType == Health)
-			{
-				int idx = std::find(tileMap.begin(), tileMap.end(), tile) - tileMap.begin();
-				tileMap.erase(tileMap.begin() + idx);
-			}
 		}
 	}
+}
+
+void Player::interactionWithItems(EntityManager<Item> &itemManager, float deltaTime)
+{
+	for (auto &item : itemManager.getEntities())
+	{
+		const Item &newItem = *item.get();
+
+		if (collider.isCollidingWith(newItem.getCollider()) && currentVelocity == Vector2f(0, 0))
+		{
+			switch (newItem.getType())
+			{
+			case Cherry:
+				pickupSound.play();
+				stats.berriesToFind -= 1;
+				break;
+			case Heart:
+				lifeSound.play();
+				stats.lives += 1;
+				break;
+			}
+
+			itemManager.erase(item);
+
+			break;
+		}
+	}
+}
+
+void Player::interactionWithObstacles(EntityManager<Obstacle> &obstacleManager, float deltaTime)
+{
+	for (auto &obstacle : obstacleManager.getEntities())
+	{
+		const Obstacle &newObstacle = *obstacle.get();
+
+		if (collider.isCollidingWith(newObstacle.getCollider()) && currentVelocity == Vector2f(0, 0))
+		{
+			switch (newObstacle.getType())
+			{
+			case Spikes:
+				if (hurtTime <= 0)
+				{
+					stats.lives -= 1;
+					hurtTime = invincibilityTime;
+					hitSound.play();
+				}
+				break;
+			}
+
+			break;
+		}
+	}
+}
+
+void Player::interactionWithLeaves(EntityManager<Leaves> &leavesManager, float deltaTime)
+{
+	for (auto &leaves : leavesManager.getEntities())
+	{
+		const Leaves &newLeaves = *leaves.get();
+
+		if (collider.isCollidingWith(newLeaves.getCollider()))
+		{
+			leavesManager.erase(leaves);
+
+			break;
+		}
+	}
+}
+
+void Player::reset(const Stats &stats)
+{
+	isAlive = true;
+	faceRight = true;
+	hurtTime = 0;
+	currentVelocity = Vector2f();
+	currentAnim = &idleAnim;
+
+	this->stats = stats;
 }
