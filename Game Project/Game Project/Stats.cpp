@@ -22,5 +22,5 @@ void Stats::update()
 {
 	text.setPosition(view->getCenter().x - view->getSize().x / 2 + view->getSize().x / 100, view->getCenter().y - view->getSize().y / 2 + view->getSize().y / 100);
 	text.setString(String(String
-	("∆изней: x" + std::to_string(int(lives)) + "\n" + "ягод осталось собрать: " + std::to_string(int(berriesToFind)) + "\n"), std::locale("rus")));
+	("√рибо-жизни: x" + std::to_string(int(lives)) + "\n" + "ягод осталось: " + std::to_string(int(berriesToFind)) + "\n"), std::locale("rus")));
 }

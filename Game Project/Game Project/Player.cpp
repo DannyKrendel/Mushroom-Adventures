@@ -161,14 +161,15 @@ void Player::update(TileMap &tileMap, float deltaTime)
 	if (stats.lives <= 0 && isAlive == true)
 	{
 		isAlive = false;
+		currentAnim = &deathAnim.reset();
 		deathSound.play();
 	}
 
-	// если персонаж не двигается
-	if (currentVelocity == Vector2f(0, 0))
+	// если персонаж жив и не двигается
+	if (isAlive && currentVelocity == Vector2f(0, 0))
 	{
 		// если текущая анимация не прыжок
-		if (currentAnim != &jumpAnim)
+		if (currentAnim != &jumpAnim && currentAnim != &deathAnim)
 		{
 			// проверка нажатых клавиш
 			handeInput();
@@ -197,7 +198,7 @@ void Player::update(TileMap &tileMap, float deltaTime)
 	}
 
 	// время неуязвимости после получения урона
-	if (hurtTime > 0)
+	if (isAlive && hurtTime > 0)
 	{
 		if (hurtTime == invincibilityTime)
 			currentAnim = &hurtAnim.reset();
@@ -214,7 +215,7 @@ void Player::update(TileMap &tileMap, float deltaTime)
 	updateAnimation(deltaTime);
 
 	// если другая анимация закончилась, переключение на стандартную анимацию
-	if (currentAnim != &idleAnim && currentAnim->isFinished())
+	if (isAlive && currentAnim != &idleAnim && currentAnim->isFinished())
 	{
 		currentAnim = &idleAnim.reset();
 	}
@@ -238,6 +239,9 @@ void Player::update(TileMap &tileMap, float deltaTime)
 
 void Player::interactionWithMap(TileMap &tileMap, float deltaTime)
 {
+	if (isAlive == false)
+		return;
+
 	for (auto &tile : tileMap)
 	{
 		if (collider.isCollidingWith(tile.getCollider()))
@@ -248,11 +252,13 @@ void Player::interactionWithMap(TileMap &tileMap, float deltaTime)
 			{
 				isSlowedDown = true;
 				maxVelocity *= 0.5f;
+				currentAnim->setDuration(currentAnim->getDuration() / 0.5f);
 			}
 			else if (tileType != Water && isSlowedDown == true)
 			{
 				isSlowedDown = false;
 				maxVelocity /= 0.5f;
+				currentAnim->setDuration(currentAnim->getDuration() * 0.5f);
 			}
 		}
 	}
@@ -260,6 +266,9 @@ void Player::interactionWithMap(TileMap &tileMap, float deltaTime)
 
 void Player::interactionWithItems(EntityManager<Item> &itemManager, float deltaTime)
 {
+	if (isAlive == false)
+		return;
+
 	for (auto &item : itemManager.getEntities())
 	{
 		const Item &newItem = *item.get();
@@ -287,6 +296,9 @@ void Player::interactionWithItems(EntityManager<Item> &itemManager, float deltaT
 
 void Player::interactionWithObstacles(EntityManager<Obstacle> &obstacleManager, float deltaTime)
 {
+	if (isAlive == false)
+		return;
+
 	for (auto &obstacle : obstacleManager.getEntities())
 	{
 		const Obstacle &newObstacle = *obstacle.get();
@@ -312,6 +324,9 @@ void Player::interactionWithObstacles(EntityManager<Obstacle> &obstacleManager, 
 
 void Player::interactionWithLeaves(EntityManager<Leaves> &leavesManager, float deltaTime)
 {
+	if (isAlive == false)
+		return;
+
 	for (auto &leaves : leavesManager.getEntities())
 	{
 		const Leaves &newLeaves = *leaves.get();

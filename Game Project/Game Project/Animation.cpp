@@ -64,7 +64,10 @@ void Animation::update(float deltaTime, bool faceRight)
 			if (isLooping)
 				currentFrame = 0;
 			else
+			{
+				currentFrame--;
 				finished = true;
+			}
 		}
 	}
 
